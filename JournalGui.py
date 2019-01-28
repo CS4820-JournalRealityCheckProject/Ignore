@@ -42,8 +42,8 @@ class JournalGui:
         self.downloadButton.pack(side=LEFT)
         self.exitButton.pack(side=RIGHT)
 
-
     def uploadFile(self):
+        data = []
         global lines
         global line
         global file_content
@@ -59,7 +59,7 @@ class JournalGui:
         input_file = file_handle.readlines()
         file_content = csv.reader(input_file)
         # next(file_content) used to remove the header
-        for index in range(100):
+        for index in range(6000):
             lines += 1
             line = next(file_content)
             print (line[1])
@@ -72,9 +72,8 @@ class JournalGui:
         self.contentField.insert(END, '\n')
         self.contentField.insert(END, '\n')
 
-        data = []
         for row in file_content:
-                #Title	PackageName	URL	Publisher	PrintISSN	OnlineISSN	ManagedCoverageBegin	ManagedCoverageEnd
+            # Title	PackageName	URL	Publisher	PrintISSN	OnlineISSN	ManagedCoverageBegin	ManagedCoverageEnd
             title = str(row[0])
             packageName = str(row[1])
             Url = str(row[2])
@@ -88,7 +87,6 @@ class JournalGui:
 
         for i in range(10):
             print data[i].__getitem__(0)
-
 
     # function for screen scrapping from Oxford
     '''
@@ -112,7 +110,6 @@ class JournalGui:
         print ("DOI: ", myDOI, "\n", "Volume: ", myVolume)
     '''
 
-
     def crossrefApi(self):
         work = Works()
         crossrefCount = work.count()
@@ -132,19 +129,15 @@ class JournalGui:
         self.contentField.insert(END, '\n')
         self.contentField.insert(END, ncross)
 
-
     @staticmethod
     def printMessage():
         print("Button works")
 
-
     def searchReady(self):
         self.readyLabel.insert(0, "File Ready")
 
-
     def searchModule(self):
         self.readyLabel.insert(0, "Connecting to  server.....")
-
 
     def searchArticle(self):
         self.crossrefApi()
