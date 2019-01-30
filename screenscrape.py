@@ -11,18 +11,13 @@ articleList = [['Oxford Journal', '10.1093/jigpal/jzy015'],
                   ]
 
 def ScienceDirect(doi, key):
-    try:
-        parameters ={"APIKey" : key}
-        r = requests.get("https://api.elsevier.com/content/article/doi/"+doi, params = parameters)
-        #print(r.url)
-        #print(r.text)
+    parameters ={"APIKey" : key}
+    r = requests.get("https://api.elsevier.com/content/article/doi/"+doi, params = parameters)
 
-        root = ET.fromstring(r.text)
-        for item in root.iter():
-            if item.text == "FULL-TEXT":
-                return True
-    except Exception:
-        pass
+    root = ET.fromstring(r.text)
+    for item in root.iter():
+        if item.text == "FULL-TEXT":
+            return True
     return False
 
 def Springer(doi):
@@ -46,7 +41,6 @@ def Oxford(doi):
     }
 
     r = requests.get(url, headers=headers)
-    #print(r.text)
 
     soup = BeautifulSoup(r.text, 'html.parser')
     for title in soup.find_all('title'):
@@ -57,7 +51,6 @@ def Oxford(doi):
     return True
 
 keySD = open("ApiKeys/ScienceDirect.txt").read()
-#print(key)
 for article in articleList:
     if article[0] == 'Oxford Journal':
         result = Oxford(article[1])
