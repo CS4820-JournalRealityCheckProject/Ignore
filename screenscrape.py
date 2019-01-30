@@ -10,10 +10,16 @@ articleList = [['Oxford Journal', '10.1093/jigpal/jzy015'],
                ['Springer', '10.1007/s10059-013-0080-3'],
                   ]
 
+def DOItoURL(doi):
+    url = "http://dx.doi.org/" + doi
+    r = requests.get(url, allow_redirects=False)
+    return (r.headers['Location'])
+
 def ScienceDirect(doi, key):
     parameters ={"APIKey" : key}
     r = requests.get("https://api.elsevier.com/content/article/doi/"+doi, params = parameters)
 
+    print(r.url)
     root = ET.fromstring(r.text)
     for item in root.iter():
         if item.text == "FULL-TEXT":
@@ -30,10 +36,7 @@ def Springer(doi):
     return True
 
 def Oxford(doi):
-    #This appears to work for only very new DOIs
-    journal = doi.split('/')[1]
-
-    url = 'https://academic.oup.com/'+journal+'/article-lookup/doi/'+doi
+    url = DOItoURL(doi)
 
     #Lie about who we are to get access
     headers = {
@@ -51,6 +54,7 @@ def Oxford(doi):
     return True
 
 keySD = open("ApiKeys/ScienceDirect.txt").read()
+
 for article in articleList:
     if article[0] == 'Oxford Journal':
         result = Oxford(article[1])
